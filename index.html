@@ -8,9 +8,38 @@
       <h1>Welcome to the Fortnite Movie Currency Website!</h1>
       <p>Wait every 5 minutes to get 1 Fortnite Movie Token so you can watch free movies.</p>
     </div>
-    <div id="video-container">
+    <div id="video-container" style="display: none;">
       <iframe width="560" height="315" src="https://www.youtube.com/embed/zokbsncxbZs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       <button id="buy-button">Buy Video</button>
     </div>
   </body>
 </html>
+
+<script>
+setInterval(function() {
+  // Increment the token count
+  const tokenCountElement = document.getElementById('token-count');
+  const currentCount = parseInt(tokenCountElement.innerHTML, 10);
+  tokenCountElement.innerHTML = currentCount + 1;
+}, 300000); // 5 minutes in milliseconds
+
+const buyButton = document.getElementById('buy-button');
+buyButton.addEventListener('click', function() {
+  // Play the video
+  const videoContainer = document.getElementById('video-container');
+  const iframe = videoContainer.querySelector('iframe');
+  iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+
+  // Reset the token count to 0
+  document.getElementById('token-count').innerHTML = 0;
+
+  // Show the video container
+  videoContainer.style.display = 'block';
+
+  // Disable the button for 250 seconds
+  buyButton.disabled = true;
+  setTimeout(function() {
+    buyButton.disabled = false;
+  }, 250000); // 250 seconds in milliseconds
+});
+</script>
